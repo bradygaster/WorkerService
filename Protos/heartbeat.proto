@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "HeartbeatService";
+
+package greet;
+
+service Heartbeat {
+  rpc ReceiveHeartbeat(HeartbeatMessage) returns (HeartbeatReceivedResponse); 
+  rpc StreamHeartbeats (google.protobuf.Empty) returns (stream HeartbeatMessage);
+}
+
+message HeartbeatMessage {
+  string hostName = 1;
+  google.protobuf.Timestamp hostTimeStamp = 2;
+}
+
+message HeartbeatReceivedResponse {
+  bool success = 1;
+}
