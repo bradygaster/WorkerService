@@ -1,18 +1,20 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: workerservice
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: workerservice
   template:
     metadata:
       labels:
-        editor: vscode
+        app: workerservice
     spec:
       containers:
       - name: workerservice
         image: {acr-prefix}.azurecr.io/workerservice:latest
         resources:
           limits:
-            cpu: "20m"
-            memory: "55M"
+            memory: "128Mi"
+            cpu: "500m"
