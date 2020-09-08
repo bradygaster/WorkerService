@@ -17,7 +17,7 @@ namespace WorkerService
     {
         private readonly ILogger<Worker> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-        private HeartbeatClient _heartbeatClient;
+        //private HeartbeatClient _heartbeatClient;
         private HttpClient _httpClient;
 
         public Worker(ILogger<Worker> logger, 
@@ -33,11 +33,11 @@ namespace WorkerService
             {
                 // -----------------
                 // you'd want to remove this line for production use, once your certs are prod
-                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                //AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                 // -----------------
                 
-                var channel = GrpcChannel.ForAddress("http://grpcservice");
-                _heartbeatClient = new HeartbeatClient(channel);
+                //var channel = GrpcChannel.ForAddress("http://grpcservice");
+                //_heartbeatClient = new HeartbeatClient(channel);
                 
                 _httpClient = _httpClientFactory.CreateClient("heartbeat");
             }
@@ -68,20 +68,20 @@ namespace WorkerService
                         var instanceInfo = JsonSerializer.Deserialize<InstanceInfo>(json);
                         _logger.LogInformation($"Internal API from host {instanceInfo.HostName} received at {instanceInfo.HostTimeStamp}");
 
-                        try
-                        {
-                            var reply = _heartbeatClient.ReceiveHeartbeat(new HeartbeatService.HeartbeatMessage
-                            {
-                                HostName = instanceInfo.HostName,
-                                HostTimeStamp = Timestamp.FromDateTime(instanceInfo.HostTimeStamp)
-                            });
+                        //try
+                        //{
+                        //    var reply = _heartbeatClient.ReceiveHeartbeat(new HeartbeatService.HeartbeatMessage
+                        //    {
+                        //        HostName = instanceInfo.HostName,
+                        //        HostTimeStamp = Timestamp.FromDateTime(instanceInfo.HostTimeStamp)
+                        //    });
 
-                            _logger.LogInformation($"Heartbeat received with success: {reply.Success}");
-                        }
-                        catch(Exception x)
-                        {
-                            _logger.LogError(x, "Error calling gRPC service");
-                        }
+                        //    _logger.LogInformation($"Heartbeat received with success: {reply.Success}");
+                        //}
+                        //catch(Exception x)
+                        //{
+                        //    _logger.LogError(x, "Error calling gRPC service");
+                        //}
                     });   
 
 #pragma warning restore CS4014
